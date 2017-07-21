@@ -162,6 +162,7 @@ function fileUpload_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 [FileName,PathName,FilterIndex] = uigetfile('*.mat','Select the MATLAB code file');
+addpath(PathName)
 handles.fileStr = FileName;
 set(handles.currentFile, 'String', FileName);
 guidata(hObject, handles);
