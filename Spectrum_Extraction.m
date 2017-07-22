@@ -31,7 +31,7 @@
 %           the length(sec) button (default is 30 second spectrum time
 %           window)
 
-% Written by Taylor Baum for NSRL at MIT (tbaum@mit.edu) - Last Updated 7/10/2017
+% Written by Taylor Baum for NSRL at MIT (tbaum@mit.edu) - Last Updated 7/21/2017
 % Pretend Copyrighted '17
 
 function varargout = Spectrum_Extraction(varargin)
@@ -108,7 +108,7 @@ prevIndex = index - 1;
 
 plotSpectrum(handles, index);
 
-plotTimeSeries(handles, currentTime);
+plotTimeSeries(handles, currentTime, 0);
 
 function Play_Callback(hObject, eventdata, handles)
 % hObject    handle to Play (see GCBO)
@@ -131,17 +131,16 @@ while (get(handles.stopButton, 'UserData') ~= 0)
         set(handles.Play, 'UserData', 0);
     end
     
-    currentTime = t1(i); % current time value in secodnds
+    currentTime = t1(i); % current time value in seconds
     nextIndex = i + 1; % increment next index
     prevIndex = i + 1; % increment prev index
     
     plotSpectrum(handles, i);
     
-    plotTimeSeries(handles, currentTime);
+    plotTimeSeries(handles, currentTime, 3);
     
     i = i + 1; % increment
     
-    pause(.075)
     get(handles.stopButton, 'UserData')
 end
 
@@ -161,6 +160,8 @@ function fileUpload_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+global filteredData
+
 [FileName,PathName,FilterIndex] = uigetfile('*.mat','Select the MATLAB code file');
 addpath(PathName)
 handles.fileStr = FileName;
@@ -178,7 +179,7 @@ currentTime = t1(nextIndex);
 
 plotSpectrum(handles, nextIndex);
 
-plotTimeSeries(handles, currentTime);
+plotTimeSeries(handles, currentTime, 1);
 
 nextIndex = nextIndex + 1;
 prevIndex = prevIndex + 1;
@@ -191,7 +192,7 @@ currentTime = t1(prevIndex);
 
 plotSpectrum(handles, prevIndex);
 
-plotTimeSeries(handles, currentTime);
+plotTimeSeries(handles, currentTime, 2);
 
 nextIndex = nextIndex - 1;
 prevIndex = prevIndex - 1;
@@ -213,7 +214,7 @@ fprintf(f, 'FILE: %s\nCREATED BY: %s on %s\nPURPOSE: %s\n\n', fileName, name, da
 stop = 0;
 
 while ~stop
-    want = input('----------------------\nTo comment, type C\nTo adjust view of spectrogram, type A\nTo exit, type E\n----------------------\nINPUT: ', 's');
+    want = input('----------------------\nTo comment, type C\nTo exit, type E\n----------------------\nINPUT: ', 's');
     if want == 'C'
         timeIndex = findClickPoint;
         time = t1(timeIndex);
@@ -221,8 +222,6 @@ while ~stop
         fprintf(f, 'At %3.3f (min) with index of %d: %s\n', time/60, timeIndex, comment);
     elseif want == 'E'
         stop = 1;
-    elseif want == 'A'
-        input('Type anything to continue: ', 's');
     else
         Message = 'Invalid input!';
         msgbox(Message);
@@ -256,7 +255,7 @@ function replot(handles)
 % plots a spectrogram of the given data with the specified parameters in
 % the edit windows of the GUI
 
-global data channel multi dataName paramWinSize paramWinStep paramTW paramTapers S1 f1 t1 Fs lowColorBound highColorBound
+global data filteredData channel multi dataName paramWinSize paramWinStep paramTW paramTapers S1 f1 t1 Fs lowColorBound highColorBound
 
 handles.dataName = dataName;
 
@@ -264,15 +263,19 @@ handles.dataName = dataName;
 
 if ~multi
     data = D.(handles.dataName);
+    data = data.';
 else
     data = D.(handles.dataName)(channel,1:length(D.(handles.dataName)));
 end
+
+bandpassFrequencies = [0, 40];
+filteredData = quickbandpass(data, Fs, bandpassFrequencies);
 
 % set initial parameters
 movingwin = [paramWinSize paramWinStep];
 params.tapers = [paramTW paramTapers];
 params.Fs = Fs;
-[S1, t1, f1] = mtspecgramc(data, movingwin, params);
+[S1, t1, f1] = mtspecgramc(filteredData, movingwin, params);
 
 % plot spectrogram
 axes(handles.spectrogram);
@@ -311,21 +314,74 @@ if handles.findPeaks
     hold off
 end
 
-function plotTimeSeries(handles, currentTime)
+function plotTimeSeries(handles, currentTime, oneSpectrum)
 
-global Fs data t1
-
-dataSnip = extractdatac(data, Fs, [currentTime (currentTime + handles.length)]);
-tSnip = 1:1:length(dataSnip);
+global Fs filteredData t1 paramWinStep
 
 axes(handles.axes5);
-plot(tSnip, dataSnip,'b-')
-xlabel('Time (min)')
-ylabel('Voltage (mV)')
-set(gca, 'XTick', 0:5*(250):length(tSnip));          
-set(gca, 'XTickLabel', 0:5:t1(end)); 
-timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)', handles.length, currentTime/60);
-title(timeSeriesTitle)
+switch oneSpectrum
+    case 0
+        dataSnip = extractdatac(filteredData, Fs, [currentTime (currentTime + handles.length)]);
+        tSnip = 1:1:length(dataSnip);
+        plot(tSnip, dataSnip,'b-')
+        xlabel('Time (min)')
+        ylabel('Voltage (mV)')
+        set(gca, 'XTick', 0:5*(250):length(tSnip));          
+        set(gca, 'XTickLabel', 0:5:t1(end)); 
+        timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)', handles.length, currentTime/60);
+        title(timeSeriesTitle)
+    case 1
+        for i = currentTime - paramWinStep:currentTime
+            dataSnip = extractdatac(filteredData, Fs, [i (i + handles.length)]);
+            tSnip = 1:1:length(dataSnip);
+
+            plot(tSnip, dataSnip,'b-')
+            xlabel('Time (min)')
+            ylabel('Voltage (mV)')
+            set(gca, 'XTick', 0:5*(250):length(tSnip));          
+            set(gca, 'XTickLabel', 0:5:t1(end)); 
+            timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)', handles.length, i/60);
+            title(timeSeriesTitle)
+
+            if i ~= currentTime + 4
+                pause(.05)
+            end
+        end
+    case 2
+        for i = currentTime:currentTime - paramWinStep
+            dataSnip = extractdatac(filteredData, Fs, [i (i + handles.length)]);
+            tSnip = 1:1:length(dataSnip);
+
+            plot(tSnip, dataSnip,'b-')
+            xlabel('Time (min)')
+            ylabel('Voltage (mV)')
+            set(gca, 'XTick', 0:5*(250):length(tSnip));          
+            set(gca, 'XTickLabel', 0:5:t1(end)); 
+            timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)', handles.length, i/60);
+            title(timeSeriesTitle)
+
+            if i ~= currentTime + 4
+                pause(.05)
+            end
+        end
+    case 3
+        for i = currentTime:currentTime + paramWinStep
+            dataSnip = extractdatac(filteredData, Fs, [i (i + handles.length)]);
+            tSnip = 1:1:length(dataSnip);
+
+            plot(tSnip, dataSnip,'b-')
+            xlabel('Time (min)')
+            ylabel('Voltage (mV)')
+            set(gca, 'XTick', 0:5*(250):length(tSnip));          
+            set(gca, 'XTickLabel', 0:5:t1(end)); 
+            timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)', handles.length, i/60);
+            title(timeSeriesTitle)
+
+            if i ~= currentTime + 4
+                pause(.05)
+            end
+        end
+end
 
 % CHECK BOX FUNCTIONS BY BAUM 2017 **********************************************************************************************************************
 
@@ -963,3 +1019,67 @@ if nargout == 0
 else
     varargout = {peakInds,peakMags};
 end
+
+% QUICKBANDPASS BY PRERAU 2011 **********************************************************************************************************************
+
+function [filtdata tail] = quickbandpass(data, Fs, bandpass_frequencies, bandwidth)
+%A quick bandpass returns a the data filtered at a given frequency center or
+%band using an equiripple bandpass filter
+%
+% filtdata = quickbandpass(data, Fs, freq_band)
+% filtdata = quickbandpass(data, Fs, freq_center)
+% filtdata = quickbandpass(data, Fs, freq_center, bandwidth)
+
+%If only a frequency center is selected
+if length(bandpass_frequencies)==1
+    %Default bandwidth is 1Hz
+    if nargin<4
+        bandwidth=1;
+    end
+    
+    %Specify frequency parameters
+    Fpass1 = max(bandpass_frequencies-(bandwidth/2),.01);    % First Passband Frequency
+    Fstop1 = max(Fpass1-.01,.01);                             % First Stopband Frequency
+    
+    Fpass2 = bandpass_frequencies+(bandwidth/2);    % Second Passband Frequency
+    Fstop2 = Fpass2+.01;                             % Second Stopband Frequency
+%If a band is selected
+else
+    Fpass1 = max(bandpass_frequencies(1),.01);   % First Passband Frequency
+    Fstop1 = max(Fpass1-.01,.01);                 % First Stopband Frequency
+    
+    Fpass2 = bandpass_frequencies(2);   % Second Passband Frequency
+    Fstop2 = Fpass2+.01;                 % Second Stopband Frequency
+end
+
+
+
+% Dstop1 = 0.001;           % First Stopband Attenuation
+% Dpass  = 0.057501127785;  % Passband Ripple
+% Dstop2 = 0.001;           % Second Stopband Attenuation
+% dens   = 20;              % Density Factor
+
+% % Calculate the order from the parameters using FIRPMORD.
+% [N, Fo, Ao, W] = firpmord(max([Fstop1 Fpass1 Fpass2 Fstop2],1e-4)/(Fs/2), [0 1 ...
+%     0], [Dstop1 Dpass Dstop2]);
+% 
+% % Calculate the coefficients using the FIRPM function.
+% b  = firpm(N, Fo, Ao, W, {dens});
+% Hd = dfilt.dffir(b);
+
+N      = 2000;   % Order
+
+Wstop1 = 1;      % First Stopband Weight
+Wpass  = 1;      % Passband Weight
+Wstop2 = 1;      % Second Stopband Weight
+
+% Calculate the coefficients using the FIRLS function.
+b  = firls(N, [0 Fstop1 Fpass1 Fpass2 Fstop2 Fs/2]/(Fs/2), [0 0 1 1 0 ...
+           0], [Wstop1 Wpass Wstop2]);
+Hd = dfilt.dffir(b);
+delay=ceil(N/2);
+
+%Filter the data and return result
+filtfull=filter(Hd,[data(1)*ones(1,N) data]);
+filtdata=[filtfull((delay+N+1):end) zeros(1,ceil(N/2))];
+tail=ceil(N/2);
