@@ -144,7 +144,7 @@ while (get(handles.stopButton, 'UserData') ~= 0)
     get(handles.stopButton, 'UserData')
 end
 
-nextIndex = i + 1;
+nextIndex = i - 1;
 prevIndex = i + 1;
 
 function stopButton_Callback(hObject, eventdata, handles)
@@ -214,7 +214,7 @@ fprintf(f, 'FILE: %s\nCREATED BY: %s on %s\nPURPOSE: %s\n\n', fileName, name, da
 stop = 0;
 
 while ~stop
-    want = input('----------------------\nTo comment, type C\nTo adjust view of spectrogram, type A\nTo exit, type E\n----------------------\nINPUT: ', 's');
+    want = input('----------------------\nTo comment, type C\nTo exit, type E\n----------------------\nINPUT: ', 's');
     if want == 'C'
         timeIndex = findClickPoint;
         time = t1(timeIndex);
@@ -222,8 +222,6 @@ while ~stop
         fprintf(f, 'At %3.3f (min) with index of %d: %s\n', time/60, timeIndex, comment);
     elseif want == 'E'
         stop = 1;
-    elseif want == 'A'
-        input('Type anything to continue: ', 's');
     else
         Message = 'Invalid input!';
         msgbox(Message);
@@ -265,6 +263,7 @@ handles.dataName = dataName;
 
 if ~multi
     data = D.(handles.dataName);
+    data = data.';
 else
     data = D.(handles.dataName)(channel,1:length(D.(handles.dataName)));
 end
@@ -332,7 +331,7 @@ switch oneSpectrum
         timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)', handles.length, currentTime/60);
         title(timeSeriesTitle)
     case 1
-        for i = currentTime - winStep:currentTime
+        for i = currentTime - paramWinStep:currentTime
             dataSnip = extractdatac(filteredData, Fs, [i (i + handles.length)]);
             tSnip = 1:1:length(dataSnip);
 
@@ -349,7 +348,7 @@ switch oneSpectrum
             end
         end
     case 2
-        for i = currentTime:currentTime - winStep
+        for i = currentTime:-1:currentTime - paramWinStep
             dataSnip = extractdatac(filteredData, Fs, [i (i + handles.length)]);
             tSnip = 1:1:length(dataSnip);
 
@@ -366,7 +365,7 @@ switch oneSpectrum
             end
         end
     case 3
-        for i = currentTime:currentTime + winStep
+        for i = currentTime:currentTime + paramWinStep
             dataSnip = extractdatac(filteredData, Fs, [i (i + handles.length)]);
             tSnip = 1:1:length(dataSnip);
 

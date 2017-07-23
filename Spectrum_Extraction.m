@@ -145,7 +145,6 @@ while (get(handles.stopButton, 'UserData') ~= 0)
 end
 
 nextIndex = i + 1;
-prevIndex = i + 1;
 
 function stopButton_Callback(hObject, eventdata, handles)
 % hObject    handle to stopButton (see GCBO)
@@ -219,7 +218,7 @@ while ~stop
         timeIndex = findClickPoint;
         time = t1(timeIndex);
         comment = input('Comment: ', 's');
-        fprintf(f, 'At %3.3f (min) with index of %d: %s\n', time/60, timeIndex, comment);
+        fprintf(f, 'At %3.3f (min): %s\n', time/60, comment);
     elseif want == 'E'
         stop = 1;
     else
@@ -348,7 +347,7 @@ switch oneSpectrum
             end
         end
     case 2
-        for i = currentTime:currentTime - paramWinStep
+        for i = currentTime:-1:currentTime - paramWinStep
             dataSnip = extractdatac(filteredData, Fs, [i (i + handles.length)]);
             tSnip = 1:1:length(dataSnip);
 
