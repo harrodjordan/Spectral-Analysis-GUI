@@ -44,7 +44,8 @@ User-interface for analysis and annotation of multitaper spectrograms optimized 
   - Gives power in frequency band from 0 to 40 Hz
   - Percent power calculated from taking power in the band over the power found from 0 to 40 Hz
 ### Find Peaks
-- Utilizes P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup,smoothtype) from Tom O'Haver to find particular peaks in 
+- Click the check box to trigger this capability
+- Utilizes P = findpeaks(x, y, SlopeThreshold, AmpThreshold, smoothwidth, peakgroup, smoothtype) from Tom O'Haver to find particular peaks in the spectrum
   - A set of fast customizable functions for locating and measuring the peaks in noisy time-series signals. Adjustable parameters allow discrimination of "real" signal peaks from noise and background. Determines the position, height, and width of each peak by least-squares curve-fitting. It can find and count over 10,000 peaks per second, and find and measure 1800 peaks per second, in very large signals. Includes two interactive versions, one with mouse-controlled sliders and one with keyboard control, for adjusting the peak finding criteria in real-time. Self-contained demos show how it works. See http://terpconnect.umd.edu/~toh/spectrum/PeakFindingandMeasurement.htm for details. Information from https://www.mathworks.com/matlabcentral/fileexchange/11755-peak-finding-and-measurement?focused=7217956&tab=function
 ### Get Spectrum
 - Once the button is pressed, a 't' will pop up. Use this t to pick a time point on the spectrogram.
