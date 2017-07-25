@@ -75,6 +75,5 @@ Thanks to the NSRL for helping me complete this project! Special thanks to Devik
 
 ## Outsourced Code
 - peakFinder: version 4.0 (428 KB) by Tom O'Haver
-  - Peak finding and measurement
 - scrollzoompan: by Michael Prerau at MIT's NSRL
 - quickbandpass: by Michael Prerau at MIT's NSRL
