@@ -70,7 +70,7 @@ User-interface for analysis and annotation of multitaper spectrograms optimized 
 - The user is prompted to enter their name, purpose, the date, and the desired file name
 
 ## Acknowledgements
-Thanks to the NSRL for helping me complete this project! Special thanks to Devika Kishnan, Dr. Emery Brown, and Dr. Patrick Purdon (pictured below in order).
+Thanks to the NSRL for helping me complete this project! Special thanks to Dr. Emery Brown, Devika Kishnan, and Dr. Patrick Purdon (pictured below in order).
 
 <img src="https://user-images.githubusercontent.com/20092998/28598292-b0fa06ec-7170-11e7-8f55-50748a03efce.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/20092998/28598300-b6a6722e-7170-11e7-8761-2b9589fe8139.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/20092998/28598304-bb1cb8b8-7170-11e7-9b2d-18ee2df92b6b.png" width="30%"></img> 
 
