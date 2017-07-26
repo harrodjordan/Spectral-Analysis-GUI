@@ -4,8 +4,8 @@ User-interface for analysis and annotation of multitaper spectrograms optimized 
 <img src="https://user-images.githubusercontent.com/20092998/28597691-4f75d728-716d-11e7-8094-5594eb820fbb.png" width="90%"></img> 
 
 ## Getting Started
-1. Download all files from the repository in a zip file
-2. Unzip folder
+1. Fork repository!!
+2. Create your own local repository
 3. Open the .m file named Spectrogram_Extraction
 4. Run the file
 5. Voila!
