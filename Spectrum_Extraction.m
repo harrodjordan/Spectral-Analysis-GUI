@@ -300,7 +300,7 @@ powerArray = S1(i, 1:end); % obtain spectrogram
 plot(f1, 10*log10(powerArray)); % plot spectrum
 xlim([0,40])
 ylim([-20, 60])
-spectrumTitle = sprintf('Spectrum at %.3f minute(s)', currentTime/60);
+spectrumTitle = sprintf('Spectrum at %.3f minute(s)|%.3f second(s)', currentTime/60, currentTime);
 title(spectrumTitle)
 xlabel('Frequency (Hz)')
 ylabel('Power in dB Scale')
@@ -327,7 +327,7 @@ switch oneSpectrum
         ylabel('Voltage (mV)')
         set(gca, 'XTick', 0:5*(250):length(tSnip));          
         set(gca, 'XTickLabel', 0:5:t1(end)); 
-        timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)', handles.length, currentTime/60);
+        timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)|%.3f second(s)', handles.length, currentTime/60, currentTime);
         title(timeSeriesTitle)
     case 1
         for i = currentTime - paramWinStep:currentTime
@@ -339,7 +339,7 @@ switch oneSpectrum
             ylabel('Voltage (mV)')
             set(gca, 'XTick', 0:5*(250):length(tSnip));          
             set(gca, 'XTickLabel', 0:5:t1(end)); 
-            timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)', handles.length, i/60);
+            timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)|%.3f second(s)', handles.length, i/60, i);
             title(timeSeriesTitle)
 
             if i ~= currentTime + 4
@@ -356,7 +356,7 @@ switch oneSpectrum
             ylabel('Voltage (mV)')
             set(gca, 'XTick', 0:5*(250):length(tSnip));          
             set(gca, 'XTickLabel', 0:5:t1(end)); 
-            timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)', handles.length, i/60);
+            timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)|%.3f second(s)', handles.length, i/60, i);
             title(timeSeriesTitle)
 
             if i ~= currentTime + 4
@@ -373,7 +373,7 @@ switch oneSpectrum
             ylabel('Voltage (mV)')
             set(gca, 'XTick', 0:5*(250):length(tSnip));          
             set(gca, 'XTickLabel', 0:5:t1(end)); 
-            timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)', handles.length, i/60);
+            timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)|%.3f second(s)', handles.length, i/60, i);
             title(timeSeriesTitle)
 
             if i ~= currentTime + 4
