@@ -4,35 +4,10 @@
 %
 % GUI for a more interactive spectral analysis of EEG data
 %
-% PLEASE READ FOLLOWING INFORMATION BEFORE USE!!! 
 %   TO USE: To help with code readability press ctrl and + simultaneously to
 %           minimize all functions
-%        
-%           - You can change the desired parameters in order to change the
-%           spectrogram's visual characteristics (default parameter values 
-%           appear when the figure is first loaded)
-%           - Click the get spectrum button and then click the desired time
-%            point corresponding to the spectrogram plot
-%           - To go to the next immediate time point, click next; to go to
-%           the previous time point, simply click previous
-%           - To watch the progression of the EEG signal, press play and 
-%           then click on the starting point you want; press
-%           stop to stop the progression
-%           - To save the figure, click the save figure button and then
-%           enter the file name you are looking at
-%           - If the default color scale shows the signal inaccurately, you
-%           can change this manually in the color scale box (default is
-%           [-25 to 10])
-%           - The scroll bars at the bottom of the figure control the
-%           spectrogram. You can zoom in and scroll through the plot to get
-%           a closer look; the spectrum extraction features will still work
-%           as usual!
-%           - You can change the length of the time-series shown next to
-%           the length(sec) button (default is 30 second spectrum time
-%           window)
-
-% Written by Taylor Baum for NSRL at MIT (tbaum@mit.edu) - Last Updated 7/21/2017
-% Pretend Copyrighted '17
+%
+% Written by Taylor Baum for NSRL at MIT (tbaum@mit.edu) - Last Updated 7/27/2017
 
 function varargout = Spectrum_Extraction(varargin)
 % Last Modified by GUIDE v2.5 18-Jul-2017 22:11:42
@@ -158,8 +133,6 @@ function fileUpload_Callback(hObject, eventdata, handles)
 % hObject    handle to fileUpload (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-global filteredData
 
 [FileName,PathName,FilterIndex] = uigetfile('*.mat','Select the MATLAB code file');
 addpath(PathName)
