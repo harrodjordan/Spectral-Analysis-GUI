@@ -20,10 +20,8 @@ User-interface for analysis and annotation of multitaper spectrograms optimized 
 - This is a pop-up window that allows one to alter the parameters of the spectrogram at any point in time
   - The parameters are those commonly used with multitaper spectral analysis
   - Helpful Reference for Multitaper Analysis 
-    - A Review of Multitaper Spectral Analysis by Behtash Babadi and EmeryN.Brown
-1555
-Abstract—Nonparametric
-- Will pop up after a file is uploaded
+    - A Review of Multitaper Spectral Analysis by Behtash Babadi and Emery Brown
+  - Will pop up after a file is uploaded
 - Each time, make sure that you specify the data file name and which channel you want if these are not the defaults of 'data' and a single channel file
 - Closing the window saves and applies the parameter changes
 ### Color Spectrum
