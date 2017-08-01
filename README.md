@@ -21,7 +21,7 @@ User-interface for analysis and annotation of multitaper spectrograms optimized 
   - The parameters are those commonly used with multitaper spectral analysis
   - Helpful Reference for Multitaper Analysis
   - A Review of Multitaper Spectral Analysis by Behtash Babadi and Emery Brown
-    - Nonparametric spectral estimation is a widely used technique in many applications ranging from radar and seismic data analysis to electroencephalography (EEG) and speech processing. Among the techniques that are used to estimate the spectral representation of a system based on finite observations, multitaper spectral estimation has many important optimality properties, but is not as widely used as it possibly could be. We give a brief overview of the standard nonparametric spectral estimation theory and the multitaper spectral estimation, and give two examples from EEG analyses of anesthesia and sleep
+    - ABSTRACT: Nonparametric spectral estimation is a widely used technique in many applications ranging from radar and seismic data analysis to electroencephalography (EEG) and speech processing. Among the techniques that are used to estimate the spectral representation of a system based on finite observations, multitaper spectral estimation has many important optimality properties, but is not as widely used as it possibly could be. We give a brief overview of the standard nonparametric spectral estimation theory and the multitaper spectral estimation, and give two examples from EEG analyses of anesthesia and sleep
 - Each time, make sure that you specify the data file name and which channel you want if these are not the defaults of 'data' and a single channel file
 - Closing the window saves and applies the parameter changes
 ### Color Spectrum
