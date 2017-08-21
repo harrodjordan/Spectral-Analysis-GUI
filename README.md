@@ -1,3 +1,7 @@
+### PENDING UPDATES
+- Ability to upload data files that aren't structs (this bug originated from the lack of consideration for files other than SED and eeganes files)
+- Error Catching
+
 # Spectral-Analysis-GUI
 User-interface for analysis and annotation of multitaper spectrograms optimized for research in the Brown/Purdon lab, the Neural Statistics Laboratory at MIT and MGH.
 
