@@ -1,3 +1,8 @@
+### PENDING UPDATES
+- Ability to upload data files that aren't structs (this bug originated from the lack of consideration for files other than SED and eeganes files)
+- Error Catching
+- Adding palette 'ok' button
+
 # Spectral-Analysis-GUI
 User-interface for analysis and annotation of multitaper spectrograms optimized for research in the Brown/Purdon lab, the Neural Statistics Laboratory at MIT and MGH.
 
@@ -13,6 +18,7 @@ User-interface for analysis and annotation of multitaper spectrograms optimized 
 ## Features
 ### File Upload
 - File must be a .mat file
+- Data must be contained in a structure!! (This is not optimal; soon, there will be an option to specify structure or just a matrix as the file organization)
 - You must know the structure of your file
   - What is the name of the variable in the structure that contains the EEG data? (data, eegdata, etc.)
   - How many channels are in the file? (1, 5, etc.)
