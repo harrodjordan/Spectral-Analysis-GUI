@@ -1,7 +1,6 @@
 %% SPECTRUM_EXTRACTION
 %
 % Spectrum_Extration() 
-% Penis
 %
 % GUI for a more interactive spectral analysis of EEG data
 %
