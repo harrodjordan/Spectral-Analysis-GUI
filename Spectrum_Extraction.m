@@ -1,11 +1,13 @@
 %% SPECTRUM_EXTRACTION
 %
-% varargout = Spectrum_Extration() 
+% Spectrum_Extration() 
+% Penis
 %
 % GUI for a more interactive spectral analysis of EEG data
 %
 %   TO USE: To help with code readability press ctrl and + simultaneously to
-%           minimize all functions
+%           minimize all functions; all other directions are contained in
+%           the readme on Github
 %
 % Written by Taylor Baum for NSRL at MIT (tbaum@mit.edu) - Last Updated 7/27/2017
 
