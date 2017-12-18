@@ -11,7 +11,7 @@
 % Written by Taylor Baum for NSRL at MIT (tbaum@mit.edu) - Last Updated 7/27/2017
 
 function varargout = Spectrum_Extraction(varargin)
-% Last Modified by GUIDE v2.5 18-Jul-2017 22:11:42
+% Last Modified by GUIDE v2.5 18-Dec-2017 08:59:44
 
 % Begin initialization code - DO NOT EDIT --------------------------------------------------------------------------------------------------------------------------------
 gui_Singleton = 1;
@@ -359,17 +359,17 @@ switch oneSpectrum
         end
 end
 
-% CHECK BOX FUNCTIONS BY BAUM 2017 **********************************************************************************************************************
-
-function findPeaks_Callback(hObject, eventdata, handles)
-% hObject    handle to findPeaks (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of findPeaks
-
-handles.findPeaks = get(hObject,'Value');
-guidata(hObject, handles);
+% % CHECK BOX FUNCTIONS BY BAUM 2017 **********************************************************************************************************************
+% 
+% function findPeaks_Callback(hObject, eventdata, handles)
+% % hObject    handle to findPeaks (see GCBO)
+% % eventdata  reserved - to be defined in a future version of MATLAB
+% % handles    structure with handles and user data (see GUIDATA)
+% 
+% % Hint: get(hObject,'Value') returns toggle state of findPeaks
+% 
+% handles.findPeaks = get(hObject,'Value');
+% guidata(hObject, handles);
 
 % FIND CLICK POINT FUNCTIONS BY BAUM 2017 **********************************************************************************************************************
 
