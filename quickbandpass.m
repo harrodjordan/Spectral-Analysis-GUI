@@ -1,4 +1,4 @@
-% QUICKBANDPASS   A quick bandpass returns a the data filtered at a given frequency center or band using an equiripple bandpass filter
+%QUICKBANDPASS   A quick bandpass returns a the data filtered at a given frequency center or band using an equiripple bandpass filter
 %
 %   Usage:
 %   [filtdata] = quickbandpass(data, Fs, bandpass_frequencies, bandwidth)
