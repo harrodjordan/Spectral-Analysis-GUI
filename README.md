@@ -1,7 +1,6 @@
 ### PENDING UPDATES
 - Ability to upload data files that aren't structs (this bug originated from the lack of consideration for files other than SED and eeganes files)
 - Error Catching
-- Adding palette 'ok' button
 
 # Spectral-Analysis-GUI
 User-interface for analysis and annotation of multitaper spectrograms optimized for research in the Brown/Purdon lab, the Neural Statistics Laboratory at MIT and MGH.
@@ -10,15 +9,14 @@ User-interface for analysis and annotation of multitaper spectrograms optimized 
 
 ## Getting Started
 1. Fork repository!!
-2. Create your own local repository
-3. Open the .m file named Spectrogram_Extraction
-4. Run the file
-5. Voila!
+2. Ensure that the entire repository is in your MATLAB path
+3. Open the .fig file named Spectrogram_Extraction located in the MAIN folder of the repository
+4. Voila!
 
 ## Features
 ### File Upload
 - File must be a .mat file
-- Data must be contained in a structure!! (This is not optimal; soon, there will be an option to specify structure or just a matrix as the file organization)
+- Data must be contained in a structure!!
 - You must know the structure of your file
   - What is the name of the variable in the structure that contains the EEG data? (data, eegdata, etc.)
   - How many channels are in the file? (1, 5, etc.)
@@ -29,11 +27,11 @@ User-interface for analysis and annotation of multitaper spectrograms optimized 
   - A Review of Multitaper Spectral Analysis by Behtash Babadi and Emery Brown which can be found at https://www.ncbi.nlm.nih.gov/pubmed/24759284
     - ABSTRACT: Nonparametric spectral estimation is a widely used technique in many applications ranging from radar and seismic data analysis to electroencephalography (EEG) and speech processing. Among the techniques that are used to estimate the spectral representation of a system based on finite observations, multitaper spectral estimation has many important optimality properties, but is not as widely used as it possibly could be. We give a brief overview of the standard nonparametric spectral estimation theory and the multitaper spectral estimation, and give two examples from EEG analyses of anesthesia and sleep
 - Each time, make sure that you specify the data file name and which channel you want if these are not the defaults of 'data' and a single channel file
-- Closing the window saves and applies the parameter changes
+- Clicking okay saves and applies the parameter changes
 ### Color Spectrum
 - This is a pop-up window that allows one to alter the color spectrum used for the spectrogram
 - Will pop up after a file is uploaded
-- Closing the window saves and applies the color spectrum changes
+- Clicking okay saves and applies the color spectrum changes
 ### Power Contents
 - This is a pop-up window that allows one to look at the power contents of a spectrogram
 - Specify the start time (t0) and the end time (t1)
