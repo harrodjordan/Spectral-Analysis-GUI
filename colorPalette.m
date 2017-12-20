@@ -77,3 +77,11 @@ if isequal(get(hObject,'waitstatus'), 'waiting')
 else
     delete(hObject);
 end
+
+% --- Executes on button press in ok.
+function ok_Callback(hObject, eventdata, handles)
+% hObject    handle to ok (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+close

@@ -27,7 +27,7 @@ function varargout = parameterPalette(varargin)
 
 % Edit the above text to modify the response to help parameterPalette
 
-% Last Modified by GUIDE v2.5 18-Jul-2017 17:15:23
+% Last Modified by GUIDE v2.5 19-Dec-2017 23:24:54
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -260,3 +260,12 @@ if isequal(get(hObject,'waitstatus'), 'waiting')
 else
     delete(hObject);
 end
+
+
+% --- Executes on button press in ok.
+function ok_Callback(hObject, eventdata, handles)
+% hObject    handle to ok (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+close
