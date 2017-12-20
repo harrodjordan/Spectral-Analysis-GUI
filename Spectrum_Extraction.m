@@ -4,11 +4,11 @@
 %
 % GUI for a more interactive spectral analysis of EEG data
 %
-% TO USE: To help with code readability press ctrl and + simultaneously to
-%         minimize all functions; all other directions are contained in
-%         the readme on Github
+%   TO USE: To help with code readability press ctrl and + simultaneously to
+%           minimize all functions; all other directions are contained in
+%           the readme on Github
 %
-% Written by Taylor Baum for NSRL at MIT (tbaum@mit.edu) - Last Updated 12/20/2017
+% Written by Taylor Baum for NSRL at MIT (tbaum@mit.edu) - Last Updated 7/27/2017
 
 function varargout = Spectrum_Extraction(varargin)
 % Last Modified by GUIDE v2.5 18-Dec-2017 08:59:44
@@ -263,7 +263,7 @@ ylim([0,40])
 xlabel('Time (sec)');
 map = jet;
 colormap(map)
-ylabel('Frequency (Hz)')
+ylabel('Frequency (dB Hz)')
 scrollzoompan;
 
 function plotSpectrum(handles, i)
@@ -358,6 +358,18 @@ switch oneSpectrum
             end
         end
 end
+
+% % CHECK BOX FUNCTIONS BY BAUM 2017 **********************************************************************************************************************
+% 
+% function findPeaks_Callback(hObject, eventdata, handles)
+% % hObject    handle to findPeaks (see GCBO)
+% % eventdata  reserved - to be defined in a future version of MATLAB
+% % handles    structure with handles and user data (see GUIDATA)
+% 
+% % Hint: get(hObject,'Value') returns toggle state of findPeaks
+% 
+% handles.findPeaks = get(hObject,'Value');
+% guidata(hObject, handles);
 
 % FIND CLICK POINT FUNCTIONS BY BAUM 2017 **********************************************************************************************************************
 

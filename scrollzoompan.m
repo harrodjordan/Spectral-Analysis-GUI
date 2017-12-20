@@ -53,6 +53,8 @@ if nargin<4
     pan_fcn=[];
 end
 
+
+
 %Get full data limits depending on direction
 if strcmpi(dir,'x')
     xl=xlim(ax(1));   
@@ -113,7 +115,6 @@ annotation(gcf,'textbox',...
 %                  SLIDER FUNCTIONS
 %***********************************************************
 %***********************************************************
-
 %-----------------------------------------------------------
 %           CALLBACK TO HANDLE TIME SCALE ZOOM
 %-----------------------------------------------------------
