@@ -35,10 +35,14 @@ function Spectrum_Extraction_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for Spectrum_Extraction
 handles.output = hObject;
 
+global amplitude
+
 % initialize the check boxes to 0
 handles.multi = 0;
 handles.findPeaks = 0;
 handles.typeRange = 0;
+
+amplitude = 200
 
 guidata(hObject, handles);
 
@@ -116,6 +120,8 @@ while (get(handles.stopButton, 'UserData') ~= 0)
     plotTimeSeries(handles, currentTime, 3);
     
     i = i + 1; % increment
+    
+    pause(.1)
     
     get(handles.stopButton, 'UserData')
 end
@@ -245,7 +251,7 @@ end
 params.movingwin = [paramWinSize paramWinStep];
 params.tapers = [paramTW paramTapers];
 params.Fs = Fs;
-bandpassFrequencies = [0, 40];
+bandpassFrequencies = [.1, 40];
 
 % calculate spectrogram matrix
 data = locdetrend(data,Fs,params.movingwin);
@@ -268,7 +274,7 @@ scrollzoompan;
 
 function plotSpectrum(handles, i)
 
-global S1 f1 t1
+global S1 f1 t1 amplitude
 
 currentTime = t1(i);
 
@@ -292,7 +298,7 @@ end
 
 function plotTimeSeries(handles, currentTime, oneSpectrum)
 
-global Fs filteredData t1 paramWinStep
+global Fs filteredData t1 paramWinStep amplitude
 
 axes(handles.axes5);
 switch oneSpectrum
@@ -306,6 +312,9 @@ switch oneSpectrum
         set(gca, 'XTickLabel', 0:5:t1(end)); 
         timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)|%.3f second(s)', handles.length, currentTime/60, currentTime);
         title(timeSeriesTitle)
+        ylim([-amplitude/2, amplitude/2])
+        yticks([-amplitude/2, amplitude/2])
+        yticks([])
     case 1
         for i = currentTime - paramWinStep:currentTime
             dataSnip = extractdatac(filteredData, Fs, [i (i + handles.length)]);
@@ -318,9 +327,12 @@ switch oneSpectrum
             set(gca, 'XTickLabel', 0:5:t1(end)); 
             timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)|%.3f second(s)', handles.length, i/60, i);
             title(timeSeriesTitle)
+            ylim([-amplitude/2, amplitude/2])
+            yticks([-amplitude/2, amplitude/2])
+            yticks([])
 
-            if i ~= currentTime + 4
-                pause(.05)
+            if i ~= currentTime
+                pause(.5)
             end
         end
     case 2
@@ -335,9 +347,12 @@ switch oneSpectrum
             set(gca, 'XTickLabel', 0:5:t1(end)); 
             timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)|%.3f second(s)', handles.length, i/60, i);
             title(timeSeriesTitle)
+            ylim([-amplitude/2, amplitude/2])
+            yticks([-amplitude/2, amplitude/2])
+            yticks([])
 
-            if i ~= currentTime + 4
-                pause(.05)
+            if i ~= currentTime
+                pause(.5)
             end
         end
     case 3
@@ -352,9 +367,12 @@ switch oneSpectrum
             set(gca, 'XTickLabel', 0:5:t1(end)); 
             timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)|%.3f second(s)', handles.length, i/60, i);
             title(timeSeriesTitle)
+            ylim([-amplitude/2, amplitude/2])
+            yticks([-amplitude/2, amplitude/2])
+            yticks([])
 
-            if i ~= currentTime + 4
-                pause(.05)
+            if i ~= currentTime
+                pause(.5)
             end
         end
 end
