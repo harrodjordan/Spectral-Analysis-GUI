@@ -35,24 +35,12 @@ function Spectrum_Extraction_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for Spectrum_Extraction
 handles.output = hObject;
 
-global amplitude amplitudeArray
-
 % initialize the check boxes to 0
 handles.multi = 0;
 handles.findPeaks = 0;
 handles.typeRange = 0;
 
-amplitudeArray = [1, 3, 5, 10, 25, 50, 75, 100, 125, 150, 200, 225, 250, 300, 350, 400, 450, 500];
-amplitude = amplitudeArray(2);
-ampValueString = sprintf('%.0f uV', amplitude);
-set(handles.ampValue, 'String', ampValueString);
-
-handles.cFontSize = 8;
-handles.mostRecent = '';
-
 guidata(hObject, handles);
-
-% linkaxes([handles.spectrogram, handles.timeSeries], 'x')
 
 function varargout = Spectrum_Extraction_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
@@ -79,19 +67,6 @@ end
 handles.length = 30;
 guidata(hObject, handles);
 
-function playbackSpeed_Callback(hObject, eventdata, handles)
-
-handles.speed = str2double(get(handles.playbackSpeed, 'String'));
-guidata(hObject, handles);
-
-function playbackSpeed_CreateFcn(hObject, eventdata, handles)
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-handles.speed = 1;
-guidata(hObject, handles);
-
 % BUTTON FUNCTIONS BY BAUM 2017 **********************************************************************************************************************
 
 function anotherSpectrum_Callback(hObject, eventdata, handles)
@@ -107,7 +82,7 @@ currentTime = t1(index);
 nextIndex = index + 1;
 prevIndex = index - 1;
 
-% plotSpectrum(handles, index);
+plotSpectrum(handles, index);
 
 plotTimeSeries(handles, currentTime, 0);
 
@@ -116,7 +91,7 @@ function Play_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global t1 nextIndex prevIndex paramWinStep amplitude
+global t1 nextIndex prevIndex
 
 i = findClickPoint();
 
@@ -129,42 +104,23 @@ while (get(handles.stopButton, 'UserData') ~= 0)
     
     % total iteration complete
     if i == length(t1)
-        set(handles.stopButton, 'UserData', 0);
+        set(handles.Play, 'UserData', 0);
     end
     
     currentTime = t1(i); % current time value in seconds
     nextIndex = i + 1; % increment next index
     prevIndex = i + 1; % increment prev index
     
-%     plotSpectrum(handles, i);
+    plotSpectrum(handles, i);
     
-    axes(handles.spectrogram);
-    xlim([currentTime - 60, currentTime + handles.length])
-% 
-%     plotTimeSeries(handles, currentTime, 3);
-%     
-    for j = currentTime:handles.speed * .2:currentTime + paramWinStep
-        axes(handles.timeSeries);
-        xlim([j (j + handles.length)])
-        timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)|%.3f second(s)', handles.length, j/60, j);
-        title(timeSeriesTitle)
-        ylim([-amplitude/2, amplitude/2])
-        yticks([-amplitude/2, amplitude/2])
-        yticks([])
-        pause(.2)
-        get(handles.stopButton, 'UserData');
-        if get(handles.stopButton, 'UserData') == 0
-            break;
-        end
-    end
+    plotTimeSeries(handles, currentTime, 3);
     
     i = i + 1; % increment
-    pause(.0001)
-    get(handles.stopButton, 'UserData');
+    
+    get(handles.stopButton, 'UserData')
 end
 
-handles.mostRecent = 0;
-guidata(hObject, handles);
+nextIndex = i + 1;
 
 function stopButton_Callback(hObject, eventdata, handles)
 % hObject    handle to stopButton (see GCBO)
@@ -186,121 +142,62 @@ set(handles.currentFile, 'String', FileName);
 guidata(hObject, handles);
 parameterPalette;
 color_Callback(hObject, eventdata, handles)
-replot(hObject, eventdata, handles)
+replot(handles)
 
 function next_Callback(hObject, eventdata, handles)
 
 global nextIndex prevIndex t1
 
-if handles.mostRecent == 1
-    nextIndex = nextIndex + 2;
-    prevIndex = prevIndex + 2;
-else
-    nextIndex = nextIndex + 1;
-    prevIndex = prevIndex + 1;
-end
-
-
 currentTime = t1(nextIndex);
 
-% plotSpectrum(handles, nextIndex);
-
-axes(handles.spectrogram);
-xlim([currentTime - 60, currentTime + handles.length])
+plotSpectrum(handles, nextIndex);
 
 plotTimeSeries(handles, currentTime, 1);
 
-handles.mostRecent = 2;
-guidata(hObject, handles);
+nextIndex = nextIndex + 1;
+prevIndex = prevIndex + 1;
 
 function previous_Callback(hObject, eventdata, handles)
 
 global prevIndex nextIndex t1
 
-if handles.mostRecent == 2
-    nextIndex = nextIndex - 2;
-    prevIndex = prevIndex - 2;
-else
-    nextIndex = nextIndex - 1;
-    prevIndex = prevIndex - 1;
-end
-
 currentTime = t1(prevIndex);
 
-axes(handles.spectrogram);
-xlim([currentTime - 60, currentTime + handles.length])
-
-% plotSpectrum(handles, prevIndex);
+plotSpectrum(handles, prevIndex);
 
 plotTimeSeries(handles, currentTime, 2);
 
-handles.mostRecent = 1;
-guidata(hObject, handles);
+nextIndex = nextIndex - 1;
+prevIndex = prevIndex - 1;
 
 function scoringSession_Callback(hObject, eventdata, handles)
 
-global t1 paramWinSize ...
-       paramWinStep paramTW paramTapers Fs
-
-% set initial parameters
-params.movingwin = [paramWinSize paramWinStep];
-params.tapers = [paramTW paramTapers];
-params.Fs = Fs;
-bandpassFrequencies = [.1, 40];
+global t1
 
 set(handles.sessionState, 'String', 'open');
 
-prompt = {'Your name: ', 'Desired file name for .txt file: ', 'Summary of purpose for session: ', 'Date: '};
-title = 'Input';
-dims = [4 100];
-definput = {'', strtok(handles.currentFile.String, '.'), 'Annotation', date};
-info = inputdlg(prompt,title,dims,definput);
+name = input('Your name: ','s');
+fileName = input('Desired file name for .txt file: ', 's');
+purpose = input('Summary of purpose for session: ', 's');
+date = input('Date (mm/dd/yyyy): ', 's');
 
-fileName = info(2);
-name = info(1);
-purpose = info(3);
-dateString = info(4);
-
-f = fopen(fileName{1},'w');
-
-fprintf(f, 'File being analyzed: %s\nSummary of session: %s\nCreated by %s on %s\n\n', fileName{1},  purpose{1}, name{1}, dateString{1});
-fprintf(f, 'PARAMS: \n WinSize = %3f \n WinStep = %3f \n TW = %3f \n Tapers = %3f \n\n', paramWinSize, paramWinStep, paramTW, paramTapers);
-fprintf(f, 'CSV Structure: \nStart of Event (sec), Start of Event (index), End of Event (sec), End of Event (index),  Name of Event\n\n');
-fprintf(f, 'START\n');
+f = fopen(fileName,'w');
+fprintf(f, 'FILE: %s\nCREATED BY: %s on %s\nPURPOSE: %s\n\n', fileName, name, date, purpose);
 
 stop = 0;
 
-list = {'Burst','Suppression','LOC', 'ROC','Awake','Artifact'};
-
 while ~stop
-    want = inputdlg('To comment, type C. To exit, type E. ', 's');
-    if want{1} == 'C'
-        Message = 'Click Start of Event on the Spectrogram';
-        Box = msgbox(Message);
-        pause(.5)
-        close(Box)
-        
-        beginningTimeIndex = findClickPoint;
-        beginningTime = t1(beginningTimeIndex);
-        
-        Message = 'Click End of Event on the Spectrogram';
-        Box = msgbox(Message);
-        pause(.5)
-        close(Box)
-        
-        endTimeIndex = findClickPoint;
-        endTime = t1(endTimeIndex);
-        
-        [comment, tf] = listdlg('ListString',list);
-
-        fprintf(f, '%3.3f, %3f, %3.3f, %3f, %s\n', beginningTime, beginningTimeIndex, endTime, endTimeIndex,  list{comment});
-    elseif want{1} == 'E'
+    want = input('----------------------\nTo comment, type C\nTo exit, type E\n----------------------\nINPUT: ', 's');
+    if want == 'C'
+        timeIndex = findClickPoint;
+        time = t1(timeIndex);
+        comment = input('Comment: ', 's');
+        fprintf(f, 'At %3.3f (min): %s\n', time/60, comment);
+    elseif want == 'E'
         stop = 1;
     else
         Message = 'Invalid input!';
-        warningBox = msgbox(Message);
-        pause(.5)
-        close(warningBox)
+        msgbox(Message);
     end
 end
 
@@ -309,85 +206,25 @@ set(handles.sessionState, 'String', 'closed');
 Message = 'Scoring session is complete and file is now closed.';
 msgbox(Message);
 
-guidata(hObject, handles);
-
 function color_Callback(hObject, eventdata, handles)
 
 colorPalette; % outputs global lowColorBound and global highColorBound
 
-replot(hObject, eventdata, handles)
-guidata(hObject, handles);
+replot(handles)
 
 function parameter_Callback(hObject, eventdata, handles)
 
 parameterPalette; % outputs global paramWinSize paramTW paramWinStep and paramTapers
 
-replot(hObject, eventdata, handles)
-guidata(hObject, handles);
+replot(handles)
 
 function power_Callback(hObject, eventdata, handles)
 
 powerPalette
-guidata(hObject, handles);
-
-function timeSeriesBoundUp_CreateFcn(hObject, eventdata, handles)
-
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-function timeSeriesBoundDown_CreateFcn(hObject, eventdata, handles)
-
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-function timeSeriesBoundUp_Callback(hObject, eventdata, handles)
-
-global amplitude amplitudeArray
-
-for i = 1:length(amplitudeArray)
-    if amplitude == amplitudeArray(i)
-        if i == length(amplitudeArray)
-            amplitude = amplitudeArray(1);
-        else
-            amplitude = amplitudeArray(i + 1);
-        end
-        break;
-    end
-end
-
-ampValueString = sprintf('%.0f uV', amplitude);
-
-set(handles.ampValue, 'String', ampValueString);
-
-function timeSeriesBoundDown_Callback(hObject, eventdata, handles)
-
-global amplitude amplitudeArray
-
-for i = 1:length(amplitudeArray)
-    if amplitude == amplitudeArray(i)
-        if i == 1
-            amplitude = amplitudeArray(end);
-        else
-            amplitude = amplitudeArray(i - 1);
-        end
-        break;
-    end
-end
-ampValueString = sprintf('%.0f uV', amplitude);
-
-set(handles.ampValue, 'String', ampValueString);
-
-function getmoredata_Callback(hObject, eventdata, handles)
-f = msgbox({strcat('Age: ', num2str(handles.age));
-         strcat('Weight: ', num2str(handles.weight));
-         strcat('Sex: ', handles.sex);
-         strcat('Surgery: ', handles.surgery)});
 
 % PLOTTING FUNCTIONS BY BAUM 2017 **********************************************************************************************************************
 
-function replot(hObject, eventdata, handles)
+function replot(handles)
 % plots a spectrogram of the given data with the specified parameters in
 % the edit windows of the GUI
 
@@ -397,30 +234,18 @@ handles.dataName = dataName;
 
 [D] = importdata(handles.fileStr);
 
-if isstruct(D)
-    if ~multi
-        data = D.(handles.dataName);
-        data = data.';
-    else
-        data = D.(handles.dataName)(channel,1:length(D.(handles.dataName)));
-    end
-    
-     if isfield(D, 'trial_info')
-         handles.age = D.trial_info.age;
-         handles.weight = D.trial_info.weight_g;
-         handles.sex = D.trial_info.sex;
-         handles.surgery = D.trial_info.surgery;
-    end
-    
+if ~multi
+    data = D.(handles.dataName);
+    data = data.';
 else
-    data = D(channel,1:length(D));
+    data = D.(handles.dataName)(channel,1:length(D.(handles.dataName)));
 end
 
 % set initial parameters
 params.movingwin = [paramWinSize paramWinStep];
 params.tapers = [paramTW paramTapers];
 params.Fs = Fs;
-bandpassFrequencies = [.1, 40];
+bandpassFrequencies = [0, 40];
 
 % calculate spectrogram matrix
 data = locdetrend(data,Fs,params.movingwin);
@@ -433,18 +258,6 @@ axes(handles.spectrogram);
 plot_matrix(S1, t1, f1);
 xlabel([]);
 caxis([lowColorBound highColorBound]);
-map = jet;
-colormap(map)
-c = colorbar;
-c.Location = 'southoutside';
-x = get(c, 'Position');
-x(2) = .145;
-x(1) = .035;
-% x(3) = .6;
-% x(4) = .02;
-set(c, 'Position', x)
-xlabel(c, 'Power (dB)')
-set(c, 'FontSize', handles.cFontSize)
 % sec2hms
 ylim([0,40])
 xlabel('Time (sec)');
@@ -453,12 +266,9 @@ colormap(map)
 ylabel('Frequency (Hz)')
 scrollzoompan;
 
-plotTimeSeriesInitial(handles)
-guidata(hObject, handles);
-
 function plotSpectrum(handles, i)
 
-global S1 f1 t1 amplitude
+global S1 f1 t1
 
 currentTime = t1(i);
 
@@ -480,92 +290,73 @@ if handles.findPeaks
     hold off
 end
 
-function plotTimeSeriesInitial(handles)
-
-global Fs filteredData
-
-dataSnip = extractdatac(filteredData, Fs, [0 length(filteredData)]);
-
-axes(handles.timeSeries);
-tSnip = 1/Fs:1/Fs:length(dataSnip)/Fs;
-plot(tSnip, dataSnip,'b-')
-
 function plotTimeSeries(handles, currentTime, oneSpectrum)
 
-global Fs filteredData t1 paramWinStep amplitude
+global Fs filteredData t1 paramWinStep
 
-axes(handles.timeSeries);
+axes(handles.axes5);
 switch oneSpectrum
     case 0
+        dataSnip = extractdatac(filteredData, Fs, [currentTime (currentTime + handles.length)]);
+        tSnip = 1:1:length(dataSnip);
+        plot(tSnip, dataSnip,'b-')
         xlabel('Time (min)')
-        ylabel('Voltage (uV)')
-        xlim([currentTime (currentTime + handles.length)])
+        ylabel('Voltage (mV)')
+        set(gca, 'XTick', 0:5*(250):length(tSnip));          
+        set(gca, 'XTickLabel', 0:5:t1(end)); 
         timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)|%.3f second(s)', handles.length, currentTime/60, currentTime);
         title(timeSeriesTitle)
-        ylim([-amplitude/2, amplitude/2])
-        yticks([-amplitude/2, amplitude/2])
-        yticks([])
-        pause(.05)
-        
     case 1
-        for i = (currentTime - paramWinStep):.05:currentTime
+        for i = currentTime - paramWinStep:currentTime
+            dataSnip = extractdatac(filteredData, Fs, [i (i + handles.length)]);
+            tSnip = 1:1:length(dataSnip);
 
-            xlim([i (i + handles.length)])
+            plot(tSnip, dataSnip,'b-')
             xlabel('Time (min)')
-            ylabel('Voltage (uV)')
+            ylabel('Voltage (mV)')
+            set(gca, 'XTick', 0:5*(250):length(tSnip));          
+            set(gca, 'XTickLabel', 0:5:t1(end)); 
             timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)|%.3f second(s)', handles.length, i/60, i);
             title(timeSeriesTitle)
-            ylim([-amplitude/2, amplitude/2])
-            yticks([-amplitude/2, amplitude/2])
-            yticks([])
-            if i ~= (currentTime)
-                pause(.005)
-            end
-            
-            if (get(handles.stopButton, 'UserData') == 0)
-                break;
-            end
 
+            if i ~= currentTime + 4
+                pause(.05)
+            end
         end
     case 2
-        for i = currentTime:-.05:(currentTime - paramWinStep)
-            xlim([i (i + handles.length)])
+        for i = currentTime:-1:currentTime - paramWinStep
+            dataSnip = extractdatac(filteredData, Fs, [i (i + handles.length)]);
+            tSnip = 1:1:length(dataSnip);
+
+            plot(tSnip, dataSnip,'b-')
             xlabel('Time (min)')
-            ylabel('Voltage (uV)')
+            ylabel('Voltage (mV)')
+            set(gca, 'XTick', 0:5*(250):length(tSnip));          
+            set(gca, 'XTickLabel', 0:5:t1(end)); 
             timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)|%.3f second(s)', handles.length, i/60, i);
             title(timeSeriesTitle)
-            ylim([-amplitude/2, amplitude/2])
-            yticks([-amplitude/2, amplitude/2])
-            yticks([])
-            
-            if i ~= (currentTime - paramWinStep)
-                pause(.005)
-            end
-            
-            if (get(handles.stopButton, 'UserData') == 0)
-                break;
-            end
 
+            if i ~= currentTime + 4
+                pause(.05)
+            end
         end
     case 3
-        for i = currentTime:.05:currentTime + paramWinStep
-            xlim([i (i + handles.length)])
+        for i = currentTime:currentTime + paramWinStep
+            dataSnip = extractdatac(filteredData, Fs, [i (i + handles.length)]);
+            tSnip = 1:1:length(dataSnip);
+
+            plot(tSnip, dataSnip,'b-')
             xlabel('Time (min)')
-            ylabel('Voltage (uV)')
+            ylabel('Voltage (mV)')
+            set(gca, 'XTick', 0:5*(250):length(tSnip));          
+            set(gca, 'XTickLabel', 0:5:t1(end)); 
             timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)|%.3f second(s)', handles.length, i/60, i);
             title(timeSeriesTitle)
-            ylim([-amplitude/2, amplitude/2])
-            yticks([-amplitude/2, amplitude/2])
-            yticks([])
-            
-            if i ~= currentTime + paramWinStep
-                pause(.005)
+
+            if i ~= currentTime + 4
+                pause(.05)
             end
-            
-            if (get(handles.stopButton, 'UserData') == 0)
-                break;
-            end
-        end      
+        end
 end
 
 % FIND CLICK POINT FUNCTIONS BY BAUM 2017 **********************************************************************************************************************

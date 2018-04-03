@@ -1,0 +1,15 @@
+File being analyzed: PROP_SED40
+Summary of session: Annotation
+Created by Taylor Baum on 02-Apr-2018
+
+PARAMS: 
+ WinSize = 2.000000 
+ WinStep = 0.500000 
+ TW = 4.000000 
+ Tapers = 4.000000 
+
+CSV Structure: 
+Start of Event (sec), Start of Event (index), End of Event (sec), End of Event (index),  Name of Event
+
+START
+441.504, 882.000000, 445.504, 890.000000, Artifact

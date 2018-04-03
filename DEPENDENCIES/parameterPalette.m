@@ -90,7 +90,7 @@ end
 
 global paramWinSize
 
-paramWinSize = 8;
+paramWinSize = 2;
 
 function paramWinStep_Callback(hObject, eventdata, handles)
 % hObject    handle to paramWinStep (see GCBO)
@@ -116,7 +116,7 @@ end
 
 global paramWinStep
 
-paramWinStep = 4;
+paramWinStep =  .5;
 
 function paramTW_Callback(hObject, eventdata, handles)
 % hObject    handle to paramTW (see GCBO)
