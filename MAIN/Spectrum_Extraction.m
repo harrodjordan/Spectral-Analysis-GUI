@@ -270,7 +270,7 @@ fprintf(f, 'START\n');
 
 stop = 0;
 
-list = {'Burst','Suppression','LOC', 'ROC','Awake','Artifact'};
+list = {'State of Burst','State of Suppression','LOC','ROC','Awake','Artifact','Burst Suppression','SCRAP THIS ANNOTATION'};
 
 while ~stop
     want = inputdlg('To comment, type C. To exit, type E. ', 's');
@@ -280,6 +280,9 @@ while ~stop
         pause(.5)
         close(Box)
         
+        message = sprintf('Adjust spectrogram to where you want to specify the event, and then click finish to click on the event!');
+        uiwait(msgbox(message));
+        
         beginningTimeIndex = findClickPoint;
         beginningTime = t1(beginningTimeIndex);
         
@@ -288,12 +291,16 @@ while ~stop
         pause(.5)
         close(Box)
         
+        message = sprintf('Adjust spectrogram to where you want to specify the event, and then click finish to click on the event!');
+        uiwait(msgbox(message));
+        
         endTimeIndex = findClickPoint;
         endTime = t1(endTimeIndex);
         
         [comment, tf] = listdlg('ListString',list);
-
+        
         fprintf(f, '%3.3f, %3f, %3.3f, %3f, %s\n', beginningTime, beginningTimeIndex, endTime, endTimeIndex,  list{comment});
+
     elseif want{1} == 'E'
         stop = 1;
     else

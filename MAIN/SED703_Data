@@ -1,0 +1,15 @@
+File being analyzed: SED703_Data
+Summary of session: Annotation
+Created by Taylor Baum on 12-Apr-2018
+
+PARAMS: 
+ WinSize = 2.000000 
+ WinStep = 0.500000 
+ TW = 4.000000 
+ Tapers = 4.000000 
+
+CSV Structure: 
+Start of Event (sec), Start of Event (index), End of Event (sec), End of Event (index),  Name of Event
+
+START
+516.504, 1032.000000, 518.504, 1036.000000, Burst
