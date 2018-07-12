@@ -78,7 +78,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-handles.length = 5;
+handles.length = 30;
 guidata(hObject, handles);
 
 function playbackSpeed_Callback(hObject, eventdata, handles)
@@ -145,7 +145,7 @@ while (get(handles.stopButton, 'UserData') ~= 0)
     
     timeSeriesDesign3(handles);
 
-    for j = currentTime:handles.speed * .2:currentTime + paramWinStep
+    for j = currentTime:handles.speed * .1:currentTime + paramWinStep
         axes(handles.timeSeries);
         xlim([j (j + handles.length)])
         timeSeriesTitle = sprintf('%d Second Time Series Starting at %.3f minute(s)|%.3f second(s)', handles.length, j/60, j);
@@ -161,7 +161,7 @@ while (get(handles.stopButton, 'UserData') ~= 0)
     end
     
     i = i + 1; % increment
-    pause(.01)
+    pause(.0001)
     get(handles.stopButton, 'UserData');
 end
 
@@ -703,10 +703,9 @@ function calculateBSP(handles, x_t)
     global Fs t1
 
     Beta = .9534;
-    theta = .3;
+    theta = .1;
 
-    axes(handles.BSP);
-    
+    axes(handl
     bandpassFrequencies = [1, 55];
 
     % Detrend Data and Filter
@@ -726,10 +725,7 @@ function calculateBSP(handles, x_t)
 
     Nt=length(z_t); t=(0:Nt-1)/Fs; eeg=x_t; binary_data=z_t; 
     
-    t = linspace(0, t1(end), length(z_t));
-    b = bar(t, z_t, 1)
-    b.FaceColor = 'k'; b.EdgeColor = 'k'; 
-
-    linkaxes([handles.spectrogram, handles.BSP], 'x')
+    t = linspace(0, length(t1), length(z_t));
+    plot(t, z_t)
 
 
