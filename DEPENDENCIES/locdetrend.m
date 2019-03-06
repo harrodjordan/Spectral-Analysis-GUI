@@ -12,7 +12,10 @@ function data=locdetrend(data,Fs,movingwin)
 % 
 % Output:
 % data:         (locally detrended data)
-data=change_row_to_column(data);
+data=data';
+addpath('/Users/jordanharrod/Desktop/Programming-Projects/Boyden-Rotation/CanSleepBeClassified/Code/chronux_2_12/spectral_analysis/continuous')
+addpath('/Users/jordanharrod/Desktop/Programming-Projects/Boyden-Rotation/CanSleepBeClassified/Code/chronux_2_12/spectral_analysis/helper')
+
 [N,C]=size(data);
 if nargin < 2 || isempty(Fs); Fs=1; end;
 if nargin < 3 || isempty(movingwin); movingwin=[N/Fs N/Fs]; end;

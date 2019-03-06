@@ -31,6 +31,8 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 
+
+
 function Spectrum_Extraction_OpeningFcn(hObject, eventdata, handles, varargin) 
 % Choose default command line output for Spectrum_Extraction
 handles.output = hObject;
@@ -50,6 +52,14 @@ function varargout = Spectrum_Extraction_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
+
+function varargout= timeSeriesBoundDown_CreateFcn(varargin)
+
+varargout{1} = 0;
+
+function varargout= timeSeriesBoundUp_CreateFcn(varargin)
+
+varargout{1} = 0;
 
 % TYPE-EDIT FIELD FUNCTIONS BY BAUM 2017 **********************************************************************************************************************
 
@@ -238,7 +248,9 @@ if ~multi
     data = D.(handles.dataName);
     data = data.';
 else
-    data = D.(handles.dataName)(channel,1:length(D.(handles.dataName)));
+    data = D.(handles.dataName);
+    data = data.';
+    data = data(channel,1:length(D.(handles.dataName)));
 end
 
 % set initial parameters
@@ -254,6 +266,8 @@ filteredData = quickbandpass(data, Fs, bandpassFrequencies);
 [S1, t1, f1] = mtspecgramc(filteredData, params.movingwin, params);
 
 % plot spectrogram
+addpath('/Users/jordanharrod/Desktop/Programming-Projects/Boyden-Rotation/CanSleepBeClassified/Code/chronux_2_12/spectral_analysis/plots')
+
 axes(handles.spectrogram);
 plot_matrix(S1, t1, f1);
 xlabel([]);
@@ -272,7 +286,7 @@ global S1 f1 t1
 
 currentTime = t1(i);
 
-axes(handles.axes2);
+axes(handles.horizontalLine);
 powerArray = S1(i, 1:end); % obtain spectrogram
 plot(f1, 10*log10(powerArray)); % plot spectrum
 xlim([0,40])
@@ -294,7 +308,7 @@ function plotTimeSeries(handles, currentTime, oneSpectrum)
 
 global Fs filteredData t1 paramWinStep
 
-axes(handles.axes5);
+axes(handles.axes6);
 switch oneSpectrum
     case 0
         dataSnip = extractdatac(filteredData, Fs, [currentTime (currentTime + handles.length)]);
@@ -370,7 +384,7 @@ global t1
 actualTime = floor(desiredTime);
 timeError = (t1(2) - t1(1))/2;
 gotIt = false;
-
+index=0;
 % transfer click point to actual S1 matrix
 for i = 1:length(t1)
     currentTime = floor(t1(i));
@@ -422,3 +436,5 @@ if ~gotIt
 end
 
 freqIndex = index;
+
+
