@@ -731,5 +731,8 @@ function calculateBSP(handles, x_t)
     b.FaceColor = 'k'; b.EdgeColor = 'k'; 
 
     linkaxes([handles.spectrogram, handles.BSP], 'x')
+    
+    
+    %%% add code for the model
 
 

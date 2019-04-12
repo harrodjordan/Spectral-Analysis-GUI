@@ -9,6 +9,8 @@
 %         the readme on Github
 %
 % Written by Taylor Baum for NSRL at MIT (tbaum@mit.edu) - Last Updated 12/20/2017
+% Updated by Jordan Harrod for NSRL/Boyden Lab at MIT (jharrod@mit.edu) -
+% Last Updated 3/7/19
 
 function varargout = Spectrum_Extraction(varargin)
 % Last Modified by GUIDE v2.5 18-Dec-2017 08:59:44
