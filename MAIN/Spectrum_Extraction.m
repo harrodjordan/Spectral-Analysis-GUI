@@ -273,7 +273,7 @@ fprintf(f, 'START\n');
 
 stop = 0;
 
-list = {'State of Burst','State of Suppression','LOC','ROC','Awake','Artifact','Burst Suppression','SCRAP THIS ANNOTATION'};
+list = {'Burst','Sup','LOC','ROC','Awake','Arti','SCRAP', 'REM', 'NREM','Quiet'};
 
 while ~stop
     want = inputdlg('To comment, type C. To exit, type E. ', 's');

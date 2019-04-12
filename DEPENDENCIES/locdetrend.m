@@ -13,8 +13,8 @@ function data=locdetrend(data,Fs,movingwin)
 % Output:
 % data:         (locally detrended data)
 data=data';
-addpath('/Users/jordanharrod/Desktop/Programming-Projects/Boyden-Rotation/CanSleepBeClassified/Code/chronux_2_12/spectral_analysis/continuous')
-addpath('/Users/jordanharrod/Desktop/Programming-Projects/Boyden-Rotation/CanSleepBeClassified/Code/chronux_2_12/spectral_analysis/helper')
+%addpath('/Users/jordanharrod/Desktop/Programming-Projects/Boyden-Rotation/CanSleepBeClassified/Code/chronux_2_12/spectral_analysis/continuous')
+%addpath('/Users/jordanharrod/Desktop/Programming-Projects/Boyden-Rotation/CanSleepBeClassified/Code/chronux_2_12/spectral_analysis/helper')
 
 [N,C]=size(data);
 if nargin < 2 || isempty(Fs); Fs=1; end;
